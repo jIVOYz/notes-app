@@ -387,6 +387,7 @@ body.dark-mode * {
 
 .search {
   border: 1px solid var(--mainColorDarker);
+  background-color: transparent;
   border-radius: 2px;
   margin: 10px;
   padding: 6px 10px;
