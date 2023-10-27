@@ -166,6 +166,7 @@ function createNewNote() {
 function openNote(e) {
   if (e.target.classList.contains("note")) {
     const note = notes.find(note => note.id == e.target.id)
+    document.body.style.overflow = "hidden"
 
     //* Open modal window
     $note.classList.add("openNote")
