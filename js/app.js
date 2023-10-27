@@ -31,7 +31,7 @@ const month = today.toLocaleString("default", { month: "long" })
 const date = `${month} ${day} at ${time}`
 
 if (localStorageSideBar == true) {
-  $aside.style.width = "200px"
+  $aside.style.width = window.innerWidth < 479 ? "100%" : "15%"
   $menuItem.forEach($item => {
     $item.style.display = "block"
   })
@@ -128,7 +128,7 @@ function toggleSideBar() {
   localStorage.setItem("app.toggleSideBar", JSON.stringify(localStorageSideBar))
 
   if (localStorageSideBar == true) {
-    $aside.style.width = "200px"
+    $aside.style.width = window.innerWidth < 479 ? "100%" : "15%"
     $menuItem.forEach($item => {
       $item.style.display = "block"
     })
