@@ -16,13 +16,14 @@ const $noteTitle = document.querySelector(".currNote__title")
 const $noteLabel = document.querySelector(".currNote__label")
 const $noteDeleteButton = document.querySelector(".currNote__delete")
 const $noteBody = document.querySelector(".currNote__body")
+const $editor = document.querySelector("#editor")
 const $noteLastEditedTime = document.querySelector(".lastEditedTime")
 
 const $overlay = document.querySelector(".overlay")
 
 let notes = JSON.parse(localStorage.getItem("app.notes")) || []
 let labels = JSON.parse(localStorage.getItem("app.labels")) || []
-let localStorageSideBar = JSON.parse(localStorage.getItem("app.toggleSideBar"))
+let isSsideBarEnabled = JSON.parse(localStorage.getItem("app.toggleSideBar"))
 
 const today = new Date()
 const day = new Date().getDate()
@@ -30,7 +31,11 @@ const time = new Date().getHours() + ":" + new Date().getMinutes()
 const month = today.toLocaleString("default", { month: "long" })
 const date = `${month} ${day} at ${time}`
 
-if (localStorageSideBar == true) {
+const quill = new Quill("#editor", {
+  theme: "snow"
+})
+
+if (isSsideBarEnabled == true) {
   $aside.style.width = window.innerWidth < 479 ? "100%" : "15%"
   $menuItem.forEach($item => {
     $item.style.display = "block"
@@ -39,7 +44,7 @@ if (localStorageSideBar == true) {
   $editLabelsList.style.display = "block"
 }
 
-if (localStorageSideBar == false) {
+if (isSsideBarEnabled == false) {
   $aside.style.width = "60px"
   $menuItem.forEach($item => {
     $item.style.display = "none"
@@ -124,10 +129,10 @@ function renderLabelsOnSideBar(label) {
 // functions
 
 function toggleSideBar() {
-  localStorageSideBar = !localStorageSideBar
-  localStorage.setItem("app.toggleSideBar", JSON.stringify(localStorageSideBar))
+  isSsideBarEnabled = !isSsideBarEnabled
+  localStorage.setItem("app.toggleSideBar", JSON.stringify(isSsideBarEnabled))
 
-  if (localStorageSideBar == true) {
+  if (isSsideBarEnabled == true) {
     $aside.style.width = window.innerWidth < 479 ? "100%" : "15%"
     $menuItem.forEach($item => {
       $item.style.display = "block"
@@ -136,7 +141,7 @@ function toggleSideBar() {
     $editLabelsList.style.display = "block"
   }
 
-  if (localStorageSideBar == false) {
+  if (isSsideBarEnabled == false) {
     $aside.style.width = "60px"
     $menuItem.forEach($item => {
       $item.style.display = "none"
@@ -180,7 +185,7 @@ function openNote(e) {
     //* Paste the data from a note
     $noteLabel.value = note.label
     $noteTitle.value = note.title
-    $noteBody.value = note.body
+    quill.setContents(note.body)
     $noteLastEditedTime.textContent = note.lastEditedTime
     $noteBody.focus()
 
@@ -193,18 +198,20 @@ function openNote(e) {
 }
 
 function editNote(note) {
-  $noteTitle.addEventListener("change", e => {
-    note.title = e.target.value
-    note.lastEditedTime = date
-    $noteLastEditedTime.textContent = note.lastEditedTime
-    localStorage.setItem("app.notes", JSON.stringify(notes))
-  })
-  $noteBody.addEventListener("change", e => {
-    note.body = e.target.value
-    note.lastEditedTime = date
-    $noteLastEditedTime.textContent = note.lastEditedTime
-    localStorage.setItem("app.notes", JSON.stringify(notes))
-  })
+$noteTitle.addEventListener("change", e => {
+  note.title = e.target.value
+  note.lastEditedTime = date
+  $noteLastEditedTime.textContent = note.lastEditedTime
+  localStorage.setItem("app.notes", JSON.stringify(notes))
+})
+
+quill.on("text-change", (delta) => {
+  let contents = quill.getContents()
+  note.body = contents.ops
+  note.lastEditedTime = date
+  $noteLastEditedTime.textContent = note.lastEditedTime
+  localStorage.setItem("app.notes", JSON.stringify(notes))
+})
 }
 
 function deleteNote(id) {

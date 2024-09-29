@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,13 +13,24 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
+
+    <!-- Quill editor -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css"
+      rel="stylesheet"
+    />
+
+    <script defer src="js/app.js"></script>
   </head>
   <body>
     <div class="wrapper">
       <aside class="aside">
         <div class="menu">
           <button class="menu__item" id="toggleSideBar">
-            <span id="toggleSideBarIcon" class="material-symbols-outlined"> double_arrow </span>
+            <span id="toggleSideBarIcon" class="material-symbols-outlined">
+              double_arrow
+            </span>
           </button>
           <button class="menu__item" id="createNoteButton">
             <span class="material-symbols-outlined"> add_circle </span>
@@ -49,10 +60,12 @@
           </div>
         </section>
       </main>
+
       <!-- Modal window -->
+
       <div class="currNote">
         <input placeholder="Title" class="currNote__title" />
-        <textarea placeholder="Body" class="currNote__body"></textarea>
+        <div class="currNote__body" id="editor"></div>
         <div class="currNote__actions">
           <button class="currNote__delete">
             <span class="material-symbols-outlined"> delete_forever </span>
@@ -65,12 +78,5 @@
       </div>
       <div class="overlay"></div>
     </div>
-
-    <script type="module" src="js/app.js"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-      lucide.createIcons()
-    </script>
   </body>
 </html>
